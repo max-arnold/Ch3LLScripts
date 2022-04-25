@@ -1,0 +1,181 @@
+"These values are set for vundle settings
+"set nocompatible " explicitly get out of vi-compatible mode
+filetype off	" required
+
+syntax on "turn on color syntax highlighting 
+
+"==============PATHOGEN============"
+" Use pathogen to easily modify the runtime path to include all
+" plugins under the ~/.vim/bundle directory
+" execute pathogen#infect()
+"syntax on
+"filetype plugin indent on 
+"==========PATHOGEN END============"
+
+
+"==============VUNDLE==============="
+"vundle: set the runtime path to include vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+"call vundle#begin()
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'saltstack/salt-vim' "salt plugin for sls files
+Plugin 'altercation/vim-colors-solarized' "color theme
+Plugin 'scrooloose/nerdtree' "file explorer
+Plugin 'kien/rainbow_parentheses.vim' "color the parenthesis
+Plugin 'kien/ctrlp.vim'
+Plugin 'tmhedberg/SimpylFold' " folding plugin
+Plugin 'airblade/vim-gitgutter' "shows git changes in file
+Plugin 'itchyny/lightline.vim' "adds the status bar below
+Plugin 'scrooloose/syntastic' "syntax checking plugin
+Plugin 'majutsushi/tagbar' "displays tags in a window
+Plugin 'tpope/vim-fugitive'
+Plugin 'vim-scripts/indentpython.vim'
+Plugin 'nvie/vim-flake8' "pep8 syntax checker
+Plugin 'AndrewRadev/linediff.vim'  "diff two sections of code
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " load filetype plugins/indent settings
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+"==============VUNDLE END===================
+
+" General Settings {
+        set pastetoggle=<F2>
+"}
+
+" Vim UI {
+	colorscheme solarized
+	set background=dark
+	set cursorline " highlight current line
+	set incsearch " search as characters are entered
+	set hlsearch "highlight matches
+	set laststatus=2 "always show the status line
+	set linespace=0 " don't insert an extra pixel lines between rows
+	set list "we do what to show tabs, to ensure we get them out of my files
+	set listchars=tab:>-,trail:- " show tabs and trailing
+	set cursorcolumn " don't highlight the current column
+	set number "turn on line numbers
+	set scrolloff=10 " keep 10 lines (top/bottom) for scope
+        set statusline=%F%m%r%h%w\ [Lines:%L]\ [Type:%{&ff}]\ %y\ [%p%%]\ [%04l,%04v]\ [FoldLevel:%{foldlevel('.')}]
+        "              | | | | |          |          |        |    |       |    |                 |
+        "              | | | | |          |          |        |    |       |    |                 + current foldlevel
+        "              | | | | |          |          |        |    |       |    + current column
+        "              | | | | |          |          |        |    |       +-- current line
+        "              | | | | |          |          |        |    +-- current % into file
+        "              | | | | |          |          |        +-- current syntax in square brackets
+        "              | | | | |          |          +-- current fileformat
+        "              | | | | |          +-- number of lines
+        "              | | | | +-- preview flag in square brackets
+        "              | | | +-- help flag in square brackets
+        "              | | +-- readonly flag in square brackets
+        "              | +-- rodified flag in square brackets
+        "              +-- full path to file in the buffer
+"}
+
+" Text Formatting/Layout {
+	set ignorecase	"case insensitive by default
+	set expandtab
+" thanks to https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
+" PEP8 indentation
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix |
+
+"}
+
+"Plugin Settings {
+    "Rainbow Parenthesis {
+        au VimEnter * RainbowParenthesesToggle
+        au Syntax * RainbowParenthesesLoadRound
+        au Syntax * RainbowParenthesesLoadSquare
+        au Syntax * RainbowParenthesesLoadBraces
+        au Syntax * RainbowParenthesesLoadChevrons
+        au Syntax * RainbowParenthesesLoadRound
+    "}
+
+    "syntastic {
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 0
+    let g:syntastic_mode_map = { 'mode': 'passive',
+                               \ 'active_filetypes': [],
+                               \ 'passive_filetypes': [''] }
+
+    "}
+
+    "tagbar {
+    let g:tagbar_left = 1 " open up the tagbar on the left
+    let g:tagbar_autofocus = 1 "When opening up tagbar cursor will move to tagbar window
+   " let g:tagbar_autopreview = 1
+    "}
+
+    "autocompleteme {
+    let g:ycm_autoclose_preview_window_after_completion=1
+    "}
+"}
+
+"Key mappings / bindings {
+	let mapleader=","
+    " no more up left right down keys. hjkl motherfucker.
+	map <up> <nop>
+	map <down> <nop>
+	map <left> <nop>
+	map <right> <nop>
+    " only need to type Q to paste recording
+	nnoremap Q @q
+	nnoremap <leader>tag :Tagbar<cr>
+    " when in visualation mode and pushing > it will keep the selection
+    " selected
+	vmap > >gv
+	vmap < <gv
+    " clone paragraph
+	noremap cp yap<S-}>p
+    " add plugin shortcut mappings
+        nmap <leader>ne :NERDTree<cr>
+        nmap <leader>st :SyntasticToggleMode<cr>
+        nmap <leader>sc :SyntasticCheck<cr>
+        nmap <leader>tt :TagbarToggle<cr>
+        nmap <leader>ts :TagbarShowTag<cr>
+        map <leader>go  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+        map <leader>ld :Linediff <CR>
+
+    "COMMAND LINE MODE MAPS
+    "save file even if forgot to sudo
+        cmap w!! w !sudo tee > /dev/null %
+
+    "INSERT MAPS
+    "PYTHON DEBUGGERS
+    "thanks to http://shanit.blogspot.com/2010/06/debugging-python-with-pdb-and-ipython.html
+    "pdb setting : insert pdb breakpoints
+        imap <leader>b import pdb;pdb.set_trace()
+    " import pudb remote
+        imap <leader>r from pudb.remote import set_trace; set_trace(term_size=(80, 24))
+    "import pudb
+        imap <leader>p import pudb; pu.db
+        au BufRead *.py nmap <leader>py :!python %
+"}

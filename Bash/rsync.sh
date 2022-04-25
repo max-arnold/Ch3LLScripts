@@ -1,0 +1,13 @@
+#!/bin/bash
+
+RSYNC='rsync -avzh'
+SRCDIR=/home/
+SRCSRV=
+SRCUSR=
+DSTDIR=servername
+DSTSRV=
+DSTUSR=
+
+$RSYNC $SRCUSR@$SRCSRV:$SRCDIR $DSTUSR@$DSTSRV:$DSTDIR
+
+
